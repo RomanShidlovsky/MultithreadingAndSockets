@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<files>
+	<file>
+		<id>1</id>
+		<firstName>Ivan</firstName>
+		<lastName>Ivanov</lastName>
+	</file>
+	<file>
+		<id>2</id>
+		<firstName>Vlad</firstName>
+		<lastName>Pupkin</lastName>
+	</file>
+	<file>
+		<id>3</id>
+		<firstName>Fedor</firstName>
+		<lastName>Sidorov</lastName>
+	</file>
+	<file>
+		<id>4</id>
+		<firstName>John</firstName>
+		<lastName>Snow</lastName>
+	</file>
+	<file>
+		<id>5</id>
+		<firstName>Vasya</firstName>
+		<lastName>Petrov</lastName>
+	</file>
+	<file>
+		<id>6</id>
+		<firstName>Fantasy</firstName>
+		<lastName>Poor</lastName>
+	</file>
+</files>
