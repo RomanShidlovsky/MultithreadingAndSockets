@@ -5,11 +5,21 @@ import by.bsuir.server.dao.creator.StudentFileCreator;
 import by.bsuir.server.model.StudentFile;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +59,7 @@ public class StudentFileDAOImpl implements StudentFileDAO {
 
     @Override
     public boolean contains(int id) {
-        return  studentFiles.containsKey(id);
+        return studentFiles.containsKey(id);
     }
 
     @Override
@@ -63,14 +73,13 @@ public class StudentFileDAOImpl implements StudentFileDAO {
     }
 
     @Override
-    public boolean add(StudentFile file)
-    {
+    public boolean add(StudentFile file) {
         boolean result = true;
         try {
             lock.writeLock().lock();
             file.setId(studentFiles.keySet().stream().max(Comparator.comparingInt(a -> a)).get() + 1);
             studentFiles.put(file.getId(), file);
-            // update xml
+            Update();
         } catch (Exception e) {
             result = false;
         } finally {
@@ -98,14 +107,38 @@ public class StudentFileDAOImpl implements StudentFileDAO {
             lock.writeLock().lock();
             file.setId(id);
             studentFiles.put(id, file);
-            // update xml
+            Update();
         } catch (Exception e) {
             result = false;
-        }finally {
+        } finally {
             lock.writeLock().unlock();
         }
         return result;
     }
 
+    private void Update() {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document document = db.newDocument();
+            Element rootFile = document.createElement("files");
+            for (var file : getAll()) {
+                Element fileElement = StudentFileCreator.getInstance().createNode(document, file);
+                rootFile.appendChild(fileElement);
+            }
 
+            document.appendChild(rootFile);
+
+            try {
+                Transformer tr = TransformerFactory.newInstance().newTransformer();
+                tr.setOutputProperty(OutputKeys.INDENT, "yes");
+                tr.transform(new DOMSource(document), new StreamResult(new FileOutputStream(RESOURCES_PATH)));
+
+            } catch (IOException | TransformerException e) {
+                e.printStackTrace();
+            }
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
 }

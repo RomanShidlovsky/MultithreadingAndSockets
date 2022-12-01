@@ -1,6 +1,8 @@
 package by.bsuir.server.dao.creator;
 
 import by.bsuir.server.model.StudentFile;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -33,5 +35,19 @@ public class StudentFileCreator {
         }
 
         return new StudentFile(id, firstName, lastName);
+    }
+
+    public Element createNode(Document doc, StudentFile file) {
+        Element e = doc.createElement("file");
+        Element id = doc.createElement("id");
+        Element first = doc.createElement("firstName");
+        Element last = doc.createElement("lastName");
+        id.appendChild(doc.createTextNode(String.valueOf(file.getId())));
+        first.appendChild(doc.createTextNode(file.getFirstName()));
+        last.appendChild(doc.createTextNode(file.getLastName()));
+        e.appendChild(id);
+        e.appendChild(first);
+        e.appendChild(last);
+        return e;
     }
 }
