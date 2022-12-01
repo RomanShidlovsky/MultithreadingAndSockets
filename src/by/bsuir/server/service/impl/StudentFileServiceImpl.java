@@ -29,8 +29,8 @@ public class StudentFileServiceImpl implements StudentFileService {
     }
 
     @Override
-    public boolean addFile(StudentFile file) {
-        return studentFileDAO.add(file);
+    public boolean addFile(String firstName, String lastName) {
+        return studentFileDAO.add(new StudentFile(0, firstName, lastName));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class StudentFileServiceImpl implements StudentFileService {
     }
 
     @Override
-    public boolean updateFile(int id, StudentFile file) {
-        return studentFileDAO.updateById(id, file);
+    public boolean updateFile(int id, String firstName, String lastName) {
+        return studentFileDAO.updateById(id, new StudentFile(id, firstName, lastName));
     }
 }

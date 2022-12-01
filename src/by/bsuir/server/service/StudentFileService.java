@@ -9,7 +9,7 @@ public interface StudentFileService {
     StudentFile createFile(Node node);
     Element createNode(Document doc, StudentFile file);
     boolean containsFile(int id);
-    boolean addFile(StudentFile file);
+    boolean addFile(String firstName, String lastName);
     StudentFile[] getAllFiles();
-    boolean updateFile(int id, StudentFile file);
+    boolean updateFile(int id, String firstName, String lastName);
 }
